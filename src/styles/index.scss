@@ -1,0 +1,47 @@
+@import './defaults.scss';
+
+main {
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+
+    >h1 {
+        text-align: center;
+    }
+
+    div.links {
+
+        .link-c {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            >div:first-child {
+                border: 5px solid lighten($th-bg-site, 10%);
+            }
+
+            >div.description {
+                padding: 1rem;
+                background-color: lighten($th-bg-site, 10%);
+                max-width: 400px;
+
+                .title {
+                    font-size: 1.125rem;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                a {
+                    text-align: center;
+                    color: rgb(255, 123, 34);
+                    font-size: 1.125rem;
+
+                    &:hover {
+                        color: lighten(rgb(255, 123, 34), 15%);
+                    }
+                }
+            }
+        }
+    }
+}
