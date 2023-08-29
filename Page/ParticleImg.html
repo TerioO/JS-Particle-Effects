@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Img to Particle Effects</title>
+      <script type="module" crossorigin src="/JS-Particle-Effects/assets/ParticleImg-5ba5d55c.js"></script>
+      <link rel="modulepreload" crossorigin href="/JS-Particle-Effects/assets/ParticleImg-171b6bb9.js">
+      <link rel="stylesheet" href="/JS-Particle-Effects/assets/ParticleImg-8651a007.css">
+    </head>
+    <body>
+        <div class="playground">
+            <div class="particle-size">
+                Pixel Size: <input type="number" min="1" max="100">
+            </div>
+            <div class="friction">
+                Friction: <input type="number" min="-10" max="10" step="0.01">
+            </div>
+            <div class="ease">
+                Ease: <input type="number" min="-10" max="10" step="0.01">
+            </div>
+            <div class="radius">
+                Radius: <input type="number" min="0" max="100000" step="1000">
+            </div>
+            <details>
+                <summary>Info</summary>
+                <p><b>Pixel Size:</b> Don't use small values (1, 2, 3), especially for large pictures!</p>
+                <p><b>Friction:</b> (0, 1): Values above ==> particles don't return, Values bellow ==> removes interactivity.</p>
+                <p><b>Ease:</b> (0, 1): Values above/bellow ==> particles don't return.</p>
+                <p><b>Radius:</b> use large values, multiples of 1000, control radius of interactivity.</p>
+            </details>
+        </div>
+        <div class="particle-img effect1"></div>
+        <div class="title">
+            <p>
+                Convert img into square particles with interactive mouse
+                effects!
+            </p>
+            <p>-- Usage --</p>
+        </div>
+        <div class="description">
+            <div class="example">
+                <div class="text">
+                    <p>Create div with <b>particle-img</b> class</p>
+                    <pre>
+                        <code>&lt;div class="particle-img effect2"&gt;&lt;/div&gt;</code>
+                    </pre>
+                    <p>
+                        Inside script add the import: 
+                    </p>
+                    <pre>
+                        <code>import { Effect } from './ParticleImg';</code>
+                    </pre>
+                    <p>Create an Effect object with required properties:</p>
+                    <pre>
+                        <code>
+                            new Effect({
+                            &nbsp;  parent: document.querySelector(".particle-img.effect2"),
+                            &nbsp;  canvas_width: 400,
+                            &nbsp;  canvas_height: 450,
+                            &nbsp;  img_src: Snow, 
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <div class="effect">
+                    <div class="particle-img effect2"></div>
+                </div>
+            </div>
+            <div class="example">
+                <div class="text">
+                    <p>You can change optional settings parameters:</p>
+                    <pre>
+                        <code>
+                            let effect3 = new Image();
+                            effect3.src = Snow;
+                            effect3.onload = () => {
+                            &nbsp;    new Effect({
+                            &nbsp;&nbsp;      parent: document.querySelector(".particle-img.effect3"),
+                            &nbsp;&nbsp;      canvas_width: effect3.width,    // Same width as img
+                            &nbsp;&nbsp;      canvas_height: effect3.height,  // Same height as img
+                            &nbsp;&nbsp;      img_src: effect3.src,
+                            &nbsp;&nbsp;}, { // Optional parameters:
+                                &nbsp;&nbsp;    particleSize: 8,
+                                &nbsp;&nbsp;    ease: 0.1,
+                                &nbsp;&nbsp;    friction: 0.3,
+                                &nbsp;&nbsp;    radius: 6000
+                                &nbsp;&nbsp;})
+                            }
+                        </code>
+                    </pre>
+                </div>
+                <div class="effect">
+                    <div class="particle-img effect3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="methods">
+            <p>-- Setting particles behavior --</p>
+            <p>You can set the values that change the particless behavior using 4 methods:</p>
+            <pre>
+                <code>
+                    let my_effect = new Effect({
+                        // Required parameters
+                    },{
+                       // Optional settings 
+                    });
+
+                    // Methods:
+
+                    // The size of the particle:
+                    my_effect.setGap(value: number);        // Natural numbers: [1, n]
+
+                    // The speed of the particle:
+                    my_effect.setEase(value: number);       // Real numbers: (0, 1)
+
+                    // The force that pushes the particles from middle of circle:
+                    my_effect.setFriction(value: number);   // Real numbers: (0, 1)
+
+                    // The radius at which particles are interactable:
+                    my_effect.setRadius(value: number;)     // Real numbers: (0, n]
+                </code>
+            </pre>
+            <p>
+                The methods don't check that the values respect those intervals, so you're gonna have to respect those boundaries before calling the methods.
+                Otherwise you can check what happens in the interactive effect!
+            </p>
+        </div>
+        <div class="final">
+            <p>The Effect component is not responsive, at <b>window.innerWidth &lt; img.width</b>, the canvas overflows through the document.</p>
+            <p>I tried making the canvas responsive but couldn't find a good solution.</p>
+            <p>For the time being this is it.</p>
+            <div class="border"></div>
+            <p>
+                Huge props to 
+                <a href="https://www.youtube.com/watch?v=vAJEHf92tV0" target="_blank">https://www.youtube.com/watch?v=vAJEHf92tV0</a>
+                that's where I got all the math for the particles.
+            </p>
+            <p>I just made this into a web component for my use.</p>
+        </div>
+        
+    </body>
+</html>
