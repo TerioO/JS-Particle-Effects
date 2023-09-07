@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Particle Text</title>
+  <script type="module" crossorigin src="/JS-Particle-Effects/assets/ParticleText-f5903616.js"></script>
+  <link rel="modulepreload" crossorigin href="/JS-Particle-Effects/assets/modulepreload-polyfill-3cfb730f.js">
+  <link rel="modulepreload" crossorigin href="/JS-Particle-Effects/assets/Particle_Text-51a0a10b.js">
+  <link rel="modulepreload" crossorigin href="/JS-Particle-Effects/assets/initHihglightJS-92e6fb4b.js">
+  <link rel="stylesheet" href="/JS-Particle-Effects/assets/initHihglightJS-7e41bf22.css">
+  <link rel="stylesheet" href="/JS-Particle-Effects/assets/ParticleText-c172fe5e.css">
+</head>
+<body>
+    <div class="usage">
+        <div class="title"></div>
+        <h2>- How to use -</h2>
+        <div class="examples-c">
+            <div class="example">
+                <div class="text t1"></div>
+                <div class="description">
+                    <p>Create a div container</p>
+                    <pre><code>&lt;div class="text t1"&gt;&lt;/div&gt;</code></pre>
+                    <p>Import the Effect class and create an object:</p>
+                    <pre><code>import { Effect as TextEffect}  from './Particle_Text';
+// Minimum options required for the Effect
+new TextEffect({
+    parent: document.querySelector(".examples-c .t1"),
+    canvas_width: 400,
+    text: "Default Settings",
+}, {}) // Must contain this empty object.</code></pre>
+                    <p>The text is placed inside a div container with css properties:</p>
+                    <pre><code>.t1 {
+    display: flex;
+    overflow: hidden;
+}</code></pre>
+                    <p>These rules are added to the style attribute of the element.</p>
+                    <p>As it can be seen, without adding some adjustments the effect is lackluster.</p>
+                    <details>
+                        <summary>Open TextEffect Type</summary>
+                        <pre class="typescript"><code>
+constructor({ 
+    parent: HTMLElement | null, 
+    canvas_width: number, 
+    canvas_max_height?: number, 
+    padding?: number, 
+    text: string, 
+}, {
+    color?: string,
+    font_size?: number,
+    font_family?: string,
+    stroke_color?: string,
+    stroke_width?: number, 
+    text_max_width?: number, 
+    letter_spacing?: number, 
+    word_spacing?: number,  
+    particles?: { 
+        size?: number, 
+        radius?: number, 
+        ease?: number, 
+        friction?: number, 
+        trail_color?: string; 
+    }
+})
+                        </code></pre>
+                    </details>
+                </div>
+            </div>
+            <div class="example">
+                <div class="text t2"></div>
+                <div class="description">
+                    <p>Center the canvas if <b>container.width > canvas.width</b></p>
+                    <pre><code>.t2 {
+    justify-content: center;
+}</code></pre>
+                    <p>Custom settings:</p>
+                    <pre class="javascript"><code>new TextEffect({
+    parent: document.querySelector(".examples-c .t2"),  
+    canvas_width: 400,      
+    canvas_max_height: 200,     // Default: undefined
+    padding: 60,                // Default: 0
+    text: "Custom Settings",
+}, {
+    color: "#21ff5c",         // Default: "black";
+    font_family: "Arial",     // Default: "serif"
+    font_size: 60,            // Default: "16"
+    text_max_width: 0.8,      // Default: 1
+    letter_spacing: 2,        // Default: undefined
+    word_spacing: 16,         // Default: undefined
+    stroke_color: "#5eefff",  // Default: 'rgba(0, 0, 0, 0)'
+    stroke_width: 2,          // Default: 1
+    particles: {
+        size: 1,            // Default: 3
+        radius: 6000,       // Default: 3000
+        ease: 0.2,          // Default: 0.1
+        friction: 0.7       // Default: 0.8
+        trail_color: "rgba(255, 0, 0, 0.75)" // Default: undefined
+    }
+})</code></pre>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div class="about">
+            <h2>- About -</h2>
+            <div class="description">
+                <div class="slice">
+                    <h4>Responsive</h4>
+                    <div class="content">
+                        <p>The canvas is responsive to some extent.</p>
+                        <p>
+                            It resizes based on <b>window.innerWidth</b> value (<b>canvas.width = window.innerWidth</b>) 
+                            but won't go above it's original size. (the value you set for <b>canvas_width</b>)
+                        </p>
+                        <p>
+                            <b>I highly recommend</b> placing the div container so that it can take entire window.innerWidth,
+                            avoid placing it inside containers with margins, paddings as text won't properly wrap/align on resizing.
+                        </p>
+                        <p>
+                            If you do need to place it inside a smaller container, try to have the text fit properly for small sizes.
+                        </p>
+                        <h4><span class="enhance">padding</span> property</h4>
+                        <p>It behaves like CSS padding, but only affects top and bottom of canvas.</p>
+                        <h4><span class="enhance">canvas_max_height</span> property</h4>
+                        <p>If window width decreases and canvas text must wrap to new line ==> <b>canvas.height</b> will increase</p>
+                        <p>Use this property to set the maximum value at which height can increase.</p>
+                        <p>In normal behavior, <b>canvas.height = textHeight + padding</b></p>
+                        <p>With this property set, text that doesn't fit the canvas will behave like <b>overflow: hidden</b> on canvas.</p>
+                    </div>
+                </div>
+                <div class="slice">
+                    <h4>Text alignment inside canvas:</h4>
+                    <div class="content">
+                        <p>The text is centered on X axis and Y axis by default.</p>
+                        <p>If you want the text to be placed at some other position/coordinate you'll need to change the code for that.</p>
+                        <p>Otherwise you can place the canvas at the position you want in the container using CSS.</p>
+                    </div>
+                </div>
+                <div class="slice">
+                    <h4>Using multiple effects:</h4>
+                    <div class="content">
+                        <p>Animation is added when mouse moves/is inside canvas.</p>
+                        <p>Animation is removed when mouse leaves canvas and particles return to original position or when the canvas is outside viewport vertical axis.</p>
+                        <p>
+                            As consequence, having multiple text effects active can reduce performance and make the effect laggy, 
+                            so either place the effects further from each other on the page or use smaller particle sizes.
+                        </p>
+                    </div>
+                </div>
+                <div class="slice">
+                    <h4>The <span class="enhance">text_max_width</span> property:</h4>
+                    <div class="content">
+                        <p>Percentage of <b>canvas.width</b> at which to draw text.</p>
+                        <p>Values: [0, 1]</p>
+                        <p>By default text is draw on entire canvas width, but by setting this to E.g: 0.5 text will wrap at <b>canvas.width/2</b></p>
+                    </div>
+                </div>
+                <div class="slice">
+                    <h4>Using Google Fonts:</h4>
+                    <div class="content">
+                        <p>
+                            If you want to use Google Fonts and have the font load properly on the canvas, you need to use <b>Web Font Loader</b>, which you can find here on npm: 
+                            <a href="https://www.npmjs.com/package/webfontloader">https://www.npmjs.com/package/webfontloader</a>
+                        </p>
+                        <p>
+                            I tried some methods using <a href="https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API">CSS Font Loading API</a> but nothing worked.
+                        </p>
+                        <p>Anyways, having said that here is how to use Google Fonts:</p>
+                        <pre><code>import WebFont from 'webfontloader';
+WebFont.load({
+    google: {
+      families: ['Russo One'],
+    },
+    active: () => {
+        new TextEffect( 
+            // ...
+        ) 
+    }
+})
+                        </code></pre>
+                    </div>
+                </div>            
+            </div>
+            <div class="example-google-font"></div>  
+        </div>
+        <div class="playground">
+            <h1>- Playground -</h1>
+            <div class="text-c">
+                <div class="menu">
+                    <input type="text" id="effect-text">
+                    <details class="context">
+                        <summary>Canvas Context</summary>
+                        <div class="field">
+                            <p>Color</p>
+                            <input type="color" id="color">
+                        </div>
+                        <div class="field">
+                            <p>Font Family</p>
+                            <input type="text" id="font-family">
+                        </div>
+                        <div class="field">
+                            <p>Font Size</p>
+                            <input type="number" min="1" max="1000" step="1" id="font-size">
+                        </div>
+                        <div class="field">
+                            <p>Stroke Color</p>
+                            <input type="color" id="stroke-color" style="order: 2" >
+                            <input type="number" min="0" max="1" step="0.01" id="stroke-color-alpha" class="first" title="alpha">
+                        </div>
+                        <div class="field">
+                            <p>Stroke Width</p>
+                            <input type="number" min="0" max="1000" id="stroke-width">
+                        </div>
+                        <div class="field">
+                            <p>Letter Spacing</p>
+                            <input type="number" min="1" max="100" id="letter-spacing">
+                        </div>
+                        <div class="field">
+                            <p>Word Spacing</p>
+                            <input type="number" min="1" max="100" id="word-spacing">
+                        </div>
+                        <div class="field">
+                            <p>Text Max Width</p>
+                            <input type="number" min="0" max="1" step="0.01" id="text-max-width">
+                        </div>
+                    </details>
+                    <details class="particles">
+                        <summary>Particles</summary>
+                        <div class="field">
+                            <p>Size</p>
+                            <input type="number" min="0" max="100" id="size">
+                        </div>
+                        <div class="field">
+                            <p>Ease</p>
+                            <input type="number" min="0" max="1" step="0.01" id="ease">
+                        </div>
+                        <div class="field">
+                            <p>Friction</p>
+                            <input type="number" min="0" max="1" step="0.01" id="friction">
+                        </div>
+                        <div class="field">
+                            <p>Radius</p>
+                            <input type="number" min="0" max="100000" step="500" id="radius">
+                        </div>
+                        <div class="field">
+                            <p>Trail Color</p>
+                            <input type="color" id="trail_color" style="order: 2">
+                            <input type="number" min="0" max="1" step="0.01" id="trail-color-alpha" value="1" class="custom" title="alpha">
+                            <input type="checkbox" id="remove-trail" title="Remove trail">
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+        <div class="setter">
+            <h1>- set() Method -</h1>
+            <div class="description">
+                <pre class="javascript"><code>let test = new TextEffect();
+test.set({
+    color: "white",
+    font_size: 90, 
+    font_family: 'Arial',
+    text_max_width: 0.9,
+    letter_spacing: 4,
+    word_spacing: 5,
+    stroke_color: 'green',
+    stroke_width: 4,
+    particles: {
+        size: 3,
+        trail_color: "orange",
+        ease: 0.05,
+        friction: 0.4,
+        radius: 10000,
+    }
+}, "New Text");
+                </code></pre>
+                <p>Whenever set method is called, animation stops, and the canvas is redrawn. This happens for any value changed.</p>
+                <p>All properties are optional, except for the settings object, the minimum arguments to call this method with:</p>
+                <pre class="javascript"><code>test.set({})</code></pre>
+                <p>Removing trail color:</p>
+                <pre class="javascript"><code>test.set({particles: {trail_color: 'none'}})</code></pre>
+                <p>Removing stroke:</p>
+                <pre class="javascript"><code>test.set({stroke_color: 'rgba(0, 0, 0, 0)'})</code></pre>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
