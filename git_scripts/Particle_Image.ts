@@ -51,7 +51,7 @@ class Particle {
 
 class Effect {
     canvas: HTMLCanvasElement; img: HTMLImageElement; ctx: CanvasRenderingContext2D; particlesArray: Particle[];
-    centerX?: number; centerY?: number; x?: number; y?: number; gap: number; animationID?: number;
+    centerX?: number; centerY?: number; x?: number; y?: number; gap: number; animationID?: number | undefined; checkAnimationEnd: number | undefined;
     mouse: { radius: number, x: number | undefined, y: number | undefined };
     settings: { particleSize?: number; ease?: number; friction?: number; radius?: number };
     constructor(container: {
@@ -89,10 +89,34 @@ class Effect {
         this.canvas.addEventListener('mousemove', (e: MouseEvent) => {
             this.mouse.x = e.offsetX;
             this.mouse.y = e.offsetY;
+            if(!this.animationID) this.animationID = requestAnimationFrame(this.animate);
         });
         this.canvas.addEventListener('mouseleave', () => {
             this.mouse.x = undefined;
             this.mouse.y = undefined;
+            if(!this.checkAnimationEnd) this.checkAnimationEnd = setInterval(() => {
+                const isNotInViewport = () => { 
+                    const rect = this.canvas.getBoundingClientRect();
+                    return (
+                        rect.bottom <= 0 ||
+                        rect.top > (window.innerHeight || document.documentElement.clientHeight)
+                    );
+                }
+                let end = this.particlesArray.every((particle) => {  
+                    return (Math.round(particle.x) === particle.originX && Math.round(particle.y) === particle.originY)
+                });
+                if (end || isNotInViewport()) { 
+                    clearInterval(this.checkAnimationEnd);
+                    this.checkAnimationEnd = undefined;
+                    if (this.animationID) cancelAnimationFrame(this.animationID);
+                    this.animationID = undefined;   
+                    if (isNotInViewport()) {
+                        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        this.particlesArray = [];        
+                        this.init();
+                    }
+                }
+            }, 17);
         })
 
         this.animate = this.animate.bind(this);
@@ -124,6 +148,9 @@ class Effect {
                 }
             }
         }
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawParticles();
+        this.updateParticles();
     }
     drawParticles() {
         this.particlesArray.forEach((particle) => {
@@ -146,7 +173,6 @@ class Effect {
             this.x = this.centerX - this.img.width * 0.5;
             this.y = this.centerY - this.img.height * 0.5;
             this.init();
-            this.animate();
         })
         this.img.addEventListener('error', () => {
             this.ctx.font = "48px serif";
@@ -177,7 +203,6 @@ class Effect {
             this.gap = Math.floor(particle_size);
             this.particlesArray = [];
             this.init();
-            this.animate();
         }     
     }
     setFriction(value: number){
@@ -198,5 +223,3 @@ class Effect {
 }
 
 export { Effect }
-
-
